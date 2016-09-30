@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Config xmlns:xlink="http://www.w3.org/1999/xlink"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../schema/config.xsd"
+        >
+        <!--the root element-->
+
+<!--
+    SipTransport.qos = true  : IP DSCP field = 0x38
+    SipTransport.qos = false : IP DSCP field = 0x00
+    RtpTransport.qos = true  : IP DSCP field = 0x30
+    RtpTransport.qos = false : IP DSCP field = 0x00
+    Media.audioCodec = PCMA,PCMU
+-->
+<Voip>
+    <SipRegistrar url="sip:voip" />
+    <SipTransport type="udp" port="5060" portRange="30" qos="true" />
+    <RtpTransport type="udp" port="6970" portRange="80" qos="true" />
+    <Media audioCodec="PCMA" />
+    <Jitter init="40" max="40" minPrefetch="20" maxPrefetch="40" />
+</Voip>
+
+<!-- xxxxDevName : виж за възможни имена с aplay -L -->
+<Audio>
+    <Line1
+        capDevName="default:CARD=CODEC"
+        capLatency="100"
+        playDevName="default:CARD=CODEC"
+        playLatency="60"
+        clockRate="8000"
+        frameTime="10"
+    />
+    <Line2
+        capDevName="default:CARD=CODEC_1"
+        capLatency="100"
+        playDevName="default:CARD=CODEC_1"
+        playLatency="60"
+        clockRate="8000"
+        frameTime="10"
+    />
+</Audio>
+
+<!--========================================================================md==
+## Удостоверяване на потребител
+================================
+- method : Метод на идентификация. Възможни стойности :
+  - card : Идентификация с потребителско ID от магнитна карта
+  - rfid : Идентификация с потребителско ID от RFID key
+  - list : Идентификация с потребителско име от списък с възможности.
+  - static : Идентификация с потребителко име от конфига
+  - keyboard : идентификация с потребителско име през VKeyboard
+
+  По подразбиране: card
+
+- pass : Да се изисква или не парола от потребителя. Възможни стойности
+  enabled, disabled. Ако e disabled логин ще се израща подразбираща се парола
+  "radisnopass"
+  По подразбиране: "enabled"
+
+
+=============================================================================-->
+<Authentication method="card,static" password="enabled" staticCardId="T1000" />
+<RoleServer url="http://voip:3001/v2/api" />
+
+
+<!--========================================================================md==
+## PTT configuration
+=====================
+
+* address: serial-port:speed
+=============================================================================-->
+<PTT footSwitch="/dev/ttyS0:9600" line1="enabled" line2="disabled" />
+
+
+<!--========================================================================md==
+### Екран - <tscreen>
+======================
+
+* feedback: Използвано у/во за акустична обратна връзка при допир на екрана.
+  Възможни стойности: "enabled", "disabled"
+  Стойност по подразбиране: "enabled"
+* calibration: Разрешена или не калибрация на екрана.
+=============================================================================-->
+<TScreen feedback="enabled" calibration="enabled" />
+
+
+<!--========================================================================md==
+## Секция GUI - <ui>
+====================
+
+* locale: bg_BG, en_US, el_GR (iso639_iso3166). Отменя системния локал. Също
+  се използва и при зареждане на речника с превода.
+* pin: ПИН за оторизиция, отклщчващ функции конфигурирани като административни.
+* terminalType: Използва се за отимизиране на изгледа при LeftHand потребители.
+  Възможни стойности:
+  - tiproRightHand
+  - tiproLeftHand
+  - genericPC
+
+=============================================================================-->
+<Ui
+    locale="bg_BG"
+    adminpin="1234"
+    terminalType="tiproRightHand"
+    clock="enabled"
+    lights="enabled"
+/>
+
+
+<!-- TODO remove from config, add to links list -->
+<EmergencyCall uri="sip:4003@voip" />
+
+
+<Network interface="bond0" />
+<Beeper dev="/dev/tty" />
+
+<Log
+    path="/var/log/gui.log"
+    std="disabled"
+    colors="auto"
+    time="enabled"
+    nanotime="disabled"
+    short="disabled"
+    debugLevel="disabled"
+    verbosity="1"
+/>
+
+<!--========================================================================md==
+## Телефонен указател - <phonebook>
+===================================
+
+* src: Път до телефонния указател.
+=============================================================================-->
+<Phonebook src="/etc/radis/pbook.xml" />
+
+</Config>
