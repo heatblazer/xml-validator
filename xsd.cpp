@@ -47,8 +47,8 @@ bool Xsd::validateXml(Xml * const xml)
     xmlDocPtr xmlDocPtr = xmlParseMemory(buf, size);
     unsigned int xsd_size = (sizeof(XSD) / sizeof(XSD[0]));
     // parse the raw memory, not a file
-    parserCtx = xmlSchemaNewParserCtxt("schema.xsd");
-//    parserCtx = xmlSchemaNewMemParserCtxt(XSD, xsd_size);
+//    parserCtx = xmlSchemaNewParserCtxt("assets/schema.xsd");
+    parserCtx = xmlSchemaNewMemParserCtxt(XSD, xsd_size);
     if (parserCtx == NULL) {
         fprintf(stderr, "Failed to load memory to parser ctx\n");
         return res;
