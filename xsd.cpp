@@ -12,7 +12,16 @@
 
 namespace izxml {
 
-static void handleValidationError(void *ctx, const char *format, ...) {
+/// TODO: suggest values needed for the
+/// produced error
+/// \brief Xsd::handleValidationError
+/// \param ctx
+/// \param format
+///
+void Xsd::handleValidationError(void *ctx, const char *format, ...) {
+
+    Xsd* xptr = (Xsd*) ctx;
+
     char *errMsg;
     va_list args;
     va_start(args, format);
@@ -47,8 +56,9 @@ bool Xsd::validateXml(Xml * const xml)
     xmlDocPtr xmlDocPtr = xmlParseMemory(buf, size);
     unsigned int xsd_size = (sizeof(XSD) / sizeof(XSD[0]));
     // parse the raw memory, not a file
-//    parserCtx = xmlSchemaNewParserCtxt("assets/schema.xsd");
-    parserCtx = xmlSchemaNewMemParserCtxt(XSD, xsd_size);
+    parserCtx = xmlSchemaNewParserCtxt("assets/schema.xsd");
+    // from memory defined in the .h file
+//    parserCtx = xmlSchemaNewMemParserCtxt(XSD, xsd_size);
     if (parserCtx == NULL) {
         fprintf(stderr, "Failed to load memory to parser ctx\n");
         return res;
@@ -67,9 +77,9 @@ bool Xsd::validateXml(Xml * const xml)
     }
 
     xmlSetStructuredErrorFunc(NULL, NULL);
-    xmlSetGenericErrorFunc(NULL, handleValidationError);
+    xmlSetGenericErrorFunc(this, handleValidationError);
     xmlThrDefSetStructuredErrorFunc(NULL, NULL);
-    xmlThrDefSetGenericErrorFunc(NULL, handleValidationError);
+    xmlThrDefSetGenericErrorFunc(this, handleValidationError);
 
     int result = xmlSchemaValidateDoc(validCtx, xmlDocPtr);
 

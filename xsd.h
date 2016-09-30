@@ -10,7 +10,7 @@ class Xsd
 public:
     Xsd();
     ~Xsd();
-
+    static void handleValidationError(void *ctx, const char *format, ...);
     bool validateXml(Xml* const xml);
 
 
