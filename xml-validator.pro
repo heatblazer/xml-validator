@@ -13,3 +13,7 @@ HEADERS += \
     xmlschema.h
 
 LIBS += -lxml2
+
+DISTFILES += \
+    assets/config.xml \
+    assets/schema.xsd
