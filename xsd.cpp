@@ -33,6 +33,8 @@ void Xsd::handleValidationError(void *ctx, const char *format, ...) {
 
 
 Xsd::Xsd()
+    : m_file(nullptr),
+      m_verbosity(false) // no verbosity by default
 {
 
 }
@@ -56,7 +58,7 @@ bool Xsd::validateXml(Xml * const xml)
     xmlDocPtr xmlDocPtr = xmlParseMemory(buf, size);
     unsigned int xsd_size = (sizeof(XSD) / sizeof(XSD[0]));
     // parse the raw memory, not a file
-    parserCtx = xmlSchemaNewParserCtxt("assets/schema.xsd");
+    parserCtx = xmlSchemaNewParserCtxt(m_file);
     // from memory defined in the .h file
 //    parserCtx = xmlSchemaNewMemParserCtxt(XSD, xsd_size);
     if (parserCtx == NULL) {
@@ -86,6 +88,16 @@ bool Xsd::validateXml(Xml * const xml)
 
     res = result == 0 ? true : false;
     return res;
+}
+
+bool Xsd::loadXsd(const char *fname)
+{
+    m_file  = fname;
+}
+
+void Xsd::verbosity(bool on_off)
+{
+    m_verbosity = on_off;
 }
 
 
