@@ -3,7 +3,9 @@
 #include "xml.h"
 #include "xmlschema.h"
 
+#include <iostream>
 #include <stdio.h>
+#include <string.h>
 
 namespace izxml {
 
@@ -22,6 +24,17 @@ void Xsd::handleValidationError(void *ctx, const char *format, ...) {
     va_start(args, format);
     vasprintf(&errMsg, format, args);
     va_end(args);
+
+    char* c = strchr(errMsg, '{');
+    xptr->m_values.push_back(c);
+    while ( (c = strchr(c, ',')) != NULL) {
+        xptr->m_values.push_back(c);
+        c++;
+    }
+
+    // TODO!!!
+    std::string s;
+    (void) s;
     fprintf(stderr, "Validation Error: %s", errMsg);
     free(errMsg);
 }
@@ -29,7 +42,7 @@ void Xsd::handleValidationError(void *ctx, const char *format, ...) {
 
 Xsd::Xsd()
     : m_file(nullptr),
-      m_verbosity(false) // no verbosity by default
+      m_verbosity(true) // no verbosity by default
 {
 
 }
@@ -44,14 +57,12 @@ bool Xsd::validateXml(Xml * const xml)
     bool res = false;
     char* buf = xml->getRawBytes();
     unsigned int size = xml->getXmlSize();
-    printf("%s\n", buf);
-
 
     xmlDocPtr xmlDocPtr = xmlParseMemory(buf, size);
     unsigned int xsd_size = (sizeof(XSD) / sizeof(XSD[0]));
     // parse the raw memory, not a file
-    m_xsd.parserCtx = xmlSchemaNewParserCtxt(m_file);
     // from memory defined in the .h file
+    m_xsd.parserCtx = xmlSchemaNewParserCtxt(m_file);
 //    parserCtx = xmlSchemaNewMemParserCtxt(XSD, xsd_size);
     if (m_xsd.parserCtx == NULL) {
         if (m_verbosity) {

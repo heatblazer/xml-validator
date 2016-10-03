@@ -4,6 +4,7 @@
 #include <libxml/parser.h>
 #include <libxml/valid.h>
 #include <libxml/xmlschemas.h>
+#include <vector>
 
 namespace izxml {
 
@@ -25,10 +26,12 @@ private:
     const char* m_file;
     bool m_verbosity;
     struct {
-    xmlSchemaParserCtxtPtr parserCtx;
-    xmlSchemaPtr    schema;
-    xmlSchemaValidCtxtPtr validCtx;
+        xmlSchemaParserCtxtPtr parserCtx;
+        xmlSchemaPtr    schema;
+        xmlSchemaValidCtxtPtr validCtx;
     } m_xsd;
+
+    std::vector<char*> m_values;
 
 };
 

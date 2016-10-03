@@ -9,40 +9,40 @@
 	<xs:sequence>
                 <xs:element name="SipRegistrar">
                     <xs:complexType>
-                        <xs:attribute name="url" type="xs:string" use="required"/>
+                        <xs:attribute name="url" type="xs:string" use="optional"/>
                     </xs:complexType>
                 </xs:element>
 
                 <xs:element name="SipTransport">
                     <xs:complexType>
-                        <xs:attribute name="type" type="xs:string" use="required"/>
-                        <xs:attribute name="port" type="xs:positiveInteger" use="required"/>
-                        <xs:attribute name="portRange" type="xs:positiveInteger" use="required"/>
-                        <xs:attribute name="qos" type="xs:string" use="required"/>
+                        <xs:attribute name="type" type="xs:string" use="optional"/>
+                        <xs:attribute name="port" type="xs:positiveInteger" use="optional"/>
+                        <xs:attribute name="portRange" type="xs:positiveInteger" use="optional"/>
+                        <xs:attribute name="qos" type="xs:string" use="optional"/>
                     </xs:complexType>
                 </xs:element>
 
                 <xs:element name="RtpTransport">
                     <xs:complexType>
-                        <xs:attribute name="type" type="xs:string" use="required"/>
-                        <xs:attribute name="port" type="xs:positiveInteger" use="required"/>
-                        <xs:attribute name="portRange" type="xs:positiveInteger" use="required"/>
-                        <xs:attribute name="qos" type="xs:string" use="required"/>
+                        <xs:attribute name="type" type="xs:string" use="optional"/>
+                        <xs:attribute name="port" type="xs:positiveInteger" use="optional"/>
+                        <xs:attribute name="portRange" type="xs:positiveInteger" use="optional"/>
+                        <xs:attribute name="qos" type="xs:string" use="optional"/>
                     </xs:complexType>
                 </xs:element>
 
                 <xs:element name="Media">
                     <xs:complexType>
-                        <xs:attribute name="audioCodec" type="xs:string" use="required"/>
+                        <xs:attribute name="audioCodec" type="xs:string" use="optional"/>
                     </xs:complexType>
                 </xs:element>
 
                 <xs:element name="Jitter">
                     <xs:complexType>
-                        <xs:attribute name="init" type="xs:integer" use="required"/>
-                        <xs:attribute name="max" type="xs:integer" use="required"/>
-                        <xs:attribute name="minPrefetch" type="xs:integer" use="required"/>
-                        <xs:attribute name="maxPrefetch" type="xs:integer" use="required"/>
+                        <xs:attribute name="init" type="xs:integer" use="optional"/>
+                        <xs:attribute name="max" type="xs:integer" use="optional"/>
+                        <xs:attribute name="minPrefetch" type="xs:integer" use="optional"/>
+                        <xs:attribute name="maxPrefetch" type="xs:integer" use="optional"/>
                     </xs:complexType>
                 </xs:element>
 	</xs:sequence>
@@ -55,8 +55,8 @@
 
             <xs:element name="Line1">
             <xs:complexType>
-                <xs:attribute name="capDevName" type="xs:string" use="required"/>
-                <xs:attribute name="capLatency" use="required">
+                <xs:attribute name="capDevName" type="xs:string" use="optional"/>
+                <xs:attribute name="capLatency" use="optional">
                     <xs:simpleType>
                         <xs:restriction base="xs:positiveInteger">
                             <xs:enumeration value="100" />
@@ -64,11 +64,11 @@
                     </xs:simpleType>
                 </xs:attribute>
 
-                <xs:attribute name="playDevName" type="xs:string" use="required"/>
-                <xs:attribute name="playLatency" type="xs:positiveInteger" use="required"/>
-                <xs:attribute name="clockRate" use="required">
+                <xs:attribute name="playDevName" type="xs:string" use="optional"/>
+                <xs:attribute name="playLatency" type="xs:positiveInteger" use="optional"/>
+                <xs:attribute name="clockRate"  use="optional">
                     <xs:simpleType>
-                        <xs:restriction base="xs:integer">
+                        <xs:restriction base="xs:positiveInteger">
                             <xs:enumeration value="8000"/>
                             <xs:enumeration value="16000"/>
                             <xs:enumeration value="32000"/>
@@ -76,7 +76,7 @@
                     </xs:simpleType>
                 </xs:attribute>
 
-                <xs:attribute name="frameTime" use="required">
+                <xs:attribute name="frameTime" use="optional">
                     <xs:simpleType>
                         <xs:restriction base="xs:integer">
                             <xs:enumeration value="10"/>
@@ -96,23 +96,23 @@
         <!-- todo chck what can be validate else -->
         <xs:element name="Authentication">
         <xs:complexType>
-            <xs:attribute name="method" use="required"/>
-            <xs:attribute name="password" use="required"/>
-            <xs:attribute name="staticCardId"  use="required"/>
+            <xs:attribute name="method" use="optional"/>
+            <xs:attribute name="password" use="optional"/>
+            <xs:attribute name="staticCardId"  use="optional"/>
         </xs:complexType>
         </xs:element>
 
         <xs:element name="RoleServer">
         <xs:complexType>
-            <xs:attribute name="url"  use="required"/>
+            <xs:attribute name="url"  use="optional"/>
         </xs:complexType>
         </xs:element>
 
         <xs:element name="PTT">
         <xs:complexType>
-            <xs:attribute name="footSwitch" use="required"/>
-            <xs:attribute name="line1"  use="required"/>
-            <xs:attribute name="line2"  use="required"/>
+            <xs:attribute name="footSwitch" use="optional"/>
+            <xs:attribute name="line1"  use="optional"/>
+            <xs:attribute name="line2"  use="optional"/>
         </xs:complexType>
         </xs:element>
 

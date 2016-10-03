@@ -12,7 +12,7 @@ namespace izxml {
 
 Xml::Xml()
     : m_data(nullptr),
-      m_verbosity(false)
+      m_verbosity(true)
 {
 
 }

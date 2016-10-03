@@ -76,15 +76,11 @@ int main(int argc, char *argv[])
                break;
            }
        }
-       xsd.validateXml(&xml);
+       // DELETEME
+       std::cout << "Validation : " << (xsd.validateXml(&xml) ? "OK" : "FAIL")
+                 << " \n";
 
     }
-#if 0
-    izxml::Xml xml;
-    xml.loadXml(argv[1]);
-    izxml::Xsd xsd;
 
-    xsd.validateXml(&xml);
-#endif
-    return 0;
+    exit(0);
 }
