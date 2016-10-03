@@ -11,34 +11,14 @@
 namespace izxml {
 
 Xml::Xml()
-    : m_data(nullptr)
+    : m_data(nullptr),
+      m_verbosity(false)
 {
 
 }
 
 Xml::~Xml()
 {
-
-}
-
-/// test a simple xml reading to a buffer
-/// \brief Xml::test
-/// \param xml
-///
-void Xml::test(const char *xml)
-{
-    unsigned int fsize = _get_file_size(xml);
-    char* xml_src = new char[sizeof(char)*fsize+1]; // don`t forget the +1 or artefacts
-                                                    // for missing 0 appear
-    FILE* fp = fopen(xml, "r");
-    char c;
-    unsigned int i = 0;
-    while ( (c = fgetc(fp)) != -1) {
-        xml_src[i++] = c;
-    }
-    printf("\n");
-    printf("XML source:\n%s\n", xml_src);
-    fclose(fp);
 
 }
 
@@ -63,6 +43,21 @@ char *Xml::getRawBytes()
 unsigned int Xml::getXmlSize()
 {
     return m_size;
+}
+
+void Xml::verbosity(bool on_off)
+{
+    m_verbosity = on_off;
+    _update();
+}
+
+void Xml::_update()
+{
+    if (m_verbosity) {
+        inithtmlDefaultSAXHandler(NULL);
+        initdocbDefaultSAXHandler(NULL);
+        initGenericErrorDefaultFunc(NULL);
+    }
 }
 
 unsigned int Xml::_get_file_size(const char *file)
