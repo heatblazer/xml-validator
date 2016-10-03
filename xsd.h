@@ -1,10 +1,11 @@
 #ifndef XSD_H
 #define XSD_H
 
+#include <QtCore>
+// lib xml //
 #include <libxml/parser.h>
 #include <libxml/valid.h>
 #include <libxml/xmlschemas.h>
-#include <vector>
 
 namespace izxml {
 
@@ -31,8 +32,7 @@ private:
         xmlSchemaValidCtxtPtr validCtx;
     } m_xsd;
 
-    std::vector<char*> m_values;
-
+    QList<QString> m_values;
 };
 
 } // namespace izxml

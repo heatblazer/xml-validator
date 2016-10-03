@@ -3,7 +3,6 @@
 #include "xml.h"
 #include "xmlschema.h"
 
-#include <iostream>
 #include <stdio.h>
 #include <string.h>
 
@@ -25,16 +24,16 @@ void Xsd::handleValidationError(void *ctx, const char *format, ...) {
     vasprintf(&errMsg, format, args);
     va_end(args);
 
-    char* c = strchr(errMsg, '{');
-    xptr->m_values.push_back(c);
-    while ( (c = strchr(c, ',')) != NULL) {
-        xptr->m_values.push_back(c);
-        c++;
-    }
-
+    char* start = strchr(errMsg, '{');
+    char* end = strchr(errMsg, '}');
+    int len = end - start;
+    char* str = new char[len-2];
+    start++;
+    end--;
+    strncpy(str, start, len-2);
     // TODO!!!
-    std::string s;
-    (void) s;
+    QString s(str);
+    QStringList vals = s.split(",");
     fprintf(stderr, "Validation Error: %s", errMsg);
     free(errMsg);
 }
