@@ -1,6 +1,10 @@
 #ifndef XSD_H
 #define XSD_H
 
+#include <libxml/parser.h>
+#include <libxml/valid.h>
+#include <libxml/xmlschemas.h>
+
 namespace izxml {
 
 class Xml;
@@ -16,8 +20,15 @@ public:
     void verbosity(bool on_off);
 
 private:
+    void _cleanup();
+private:
     const char* m_file;
     bool m_verbosity;
+    struct {
+    xmlSchemaParserCtxtPtr parserCtx;
+    xmlSchemaPtr    schema;
+    xmlSchemaValidCtxtPtr validCtx;
+    } m_xsd;
 
 };
 
