@@ -5,11 +5,6 @@
 
 #include <stdio.h>
 
-
-#include <libxml/parser.h>
-#include <libxml/valid.h>
-#include <libxml/xmlschemas.h>
-
 namespace izxml {
 
 /// TODO: suggest values needed for the
@@ -41,7 +36,7 @@ Xsd::Xsd()
 
 Xsd::~Xsd()
 {
-
+    _cleanup();
 }
 
 bool Xsd::validateXml(Xml * const xml)
@@ -51,40 +46,44 @@ bool Xsd::validateXml(Xml * const xml)
     unsigned int size = xml->getXmlSize();
     printf("%s\n", buf);
 
-    xmlSchemaParserCtxtPtr parserCtx = NULL;
-    xmlSchemaPtr    schema = NULL;
-    xmlSchemaValidCtxtPtr validCtx = NULL;
 
     xmlDocPtr xmlDocPtr = xmlParseMemory(buf, size);
     unsigned int xsd_size = (sizeof(XSD) / sizeof(XSD[0]));
     // parse the raw memory, not a file
-    parserCtx = xmlSchemaNewParserCtxt(m_file);
+    m_xsd.parserCtx = xmlSchemaNewParserCtxt(m_file);
     // from memory defined in the .h file
 //    parserCtx = xmlSchemaNewMemParserCtxt(XSD, xsd_size);
-    if (parserCtx == NULL) {
-        fprintf(stderr, "Failed to load memory to parser ctx\n");
-        return res;
+    if (m_xsd.parserCtx == NULL) {
+        if (m_verbosity) {
+            fprintf(stderr, "Failed to load memory to parser ctx\n");
+        }
+        exit(3);
     }
 
-    schema = xmlSchemaParse(parserCtx);
-    if (schema == NULL) {
-        fprintf(stderr, "Could not parse XSD schema\n");
-        return res;
+    m_xsd.schema = xmlSchemaParse(m_xsd.parserCtx);
+    if (m_xsd.schema == NULL) {
+        if (m_verbosity) {
+            fprintf(stderr, "Could not parse XSD schema\n");
+        }
+        exit(3);
     }
 
-    validCtx = xmlSchemaNewValidCtxt(schema);
-    if (validCtx == NULL) {
-        fprintf(stderr, "Could not create XSD schema validator\n");
-        return res;
+    m_xsd.validCtx = xmlSchemaNewValidCtxt(m_xsd.schema);
+    if (m_xsd.validCtx == NULL) {
+        if (m_verbosity) {
+            fprintf(stderr, "Could not create XSD schema validator\n");
+        }
+        exit(3);
     }
 
-    xmlSetStructuredErrorFunc(NULL, NULL);
-    xmlSetGenericErrorFunc(this, handleValidationError);
-    xmlThrDefSetStructuredErrorFunc(NULL, NULL);
-    xmlThrDefSetGenericErrorFunc(this, handleValidationError);
+    if (m_verbosity) {
+        xmlSetStructuredErrorFunc(NULL, NULL);
+        xmlSetGenericErrorFunc(this, handleValidationError);
+        xmlThrDefSetStructuredErrorFunc(NULL, NULL);
+        xmlThrDefSetGenericErrorFunc(this, handleValidationError);
+    }
 
-    int result = xmlSchemaValidateDoc(validCtx, xmlDocPtr);
-
+    int result = xmlSchemaValidateDoc(m_xsd.validCtx, xmlDocPtr);
 
     res = result == 0 ? true : false;
     return res;
@@ -100,6 +99,22 @@ void Xsd::verbosity(bool on_off)
     m_verbosity = on_off;
 }
 
+void Xsd::_cleanup()
+{
+    // cleanup
+    if (m_xsd.parserCtx != NULL) {
+        xmlSchemaFreeParserCtxt(m_xsd.parserCtx);
+
+    }
+
+    if (m_xsd.schema != NULL) {
+        xmlSchemaFree(m_xsd.schema);
+    }
+
+    if (m_xsd.validCtx != NULL) {
+        xmlSchemaFreeValidCtxt(m_xsd.validCtx);
+    }
+}
 
 
 } // namespace izxml
