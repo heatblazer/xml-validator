@@ -14,8 +14,8 @@ static void print_menu(const char* opt)
     }
     printf("Usage:\n"
               "-a omit all messages\n"
-              "-x load xml\n"
-              "-s load xsd\n");
+              "-x <xml file>\n"
+              "-s <xsd file>\n");
 }
 
 /// 1 is suppres verbosity
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
                    exit(3);
                }
                xsd.loadXsd(argv[i+1]);
-               xsd.parseXsd("assets/schema.xsd");
+               xsd.parseXsd(argv[i+1]);
                break;
            case 1:
                // omit verbosity - set the message level
