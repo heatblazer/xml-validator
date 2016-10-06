@@ -39,10 +39,10 @@
 
                 <xs:element name="Jitter">
                     <xs:complexType>
-                        <xs:attribute name="init" type="xs:integer" use="optional"/>
-                        <xs:attribute name="max" type="xs:integer" use="optional"/>
-                        <xs:attribute name="minPrefetch" type="xs:integer" use="optional"/>
-                        <xs:attribute name="maxPrefetch" type="xs:integer" use="optional"/>
+                        <xs:attribute name="init" type="xs:positiveInteger" use="optional"/>
+                        <xs:attribute name="max" type="xs:positiveInteger" use="optional"/>
+                        <xs:attribute name="minPrefetch" type="xs:positiveInteger" use="optional"/>
+                        <xs:attribute name="maxPrefetch" type="xs:positiveInteger" use="optional"/>
                     </xs:complexType>
                 </xs:element>
 	</xs:sequence>
@@ -72,13 +72,14 @@
                             <xs:enumeration value="8000"/>
                             <xs:enumeration value="16000"/>
                             <xs:enumeration value="32000"/>
+                            <xs:enumeration value="44000" />
                         </xs:restriction>
                     </xs:simpleType>
                 </xs:attribute>
 
                 <xs:attribute name="frameTime" use="optional">
                     <xs:simpleType>
-                        <xs:restriction base="xs:integer">
+                        <xs:restriction base="xs:positiveInteger">
                             <xs:enumeration value="10"/>
                             <xs:enumeration value="20"/>
                         </xs:restriction>
@@ -110,19 +111,208 @@
 
         <xs:element name="PTT">
         <xs:complexType>
-            <xs:attribute name="footSwitch" use="optional"/>
+            <xs:attribute name="footSwitch" use="optional">
+                <!-- todo fill -->
+            </xs:attribute>
             <xs:attribute name="line1"  use="optional"/>
             <xs:attribute name="line2"  use="optional"/>
         </xs:complexType>
         </xs:element>
 
-        <xs:element name="TScreen"/>
-        <xs:element name="Ui"/>
-        <xs:element name="EmergencyCall"/>
-        <xs:element name="Network"/>
-        <xs:element name="Beeper"/>
-        <xs:element name="Log"/>
-        <xs:element name="Phonebook"/>
+        <!-- Tipro touch screen -->
+        <xs:element name="TScreen">
+	<xs:complexType>	
+	<xs:attribute name="feedback" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="enabled" />
+                    <xs:pattern value="disabled" />
+                    <xs:pattern value="on" />
+                    <xs:pattern value="off" />
+                </xs:restriction>
+            </xs:simpleType>
+	</xs:attribute>
+        <xs:attribute name="calibration" use="optional">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="enabled" />
+                    <xs:pattern value="disabled" />
+                    <xs:pattern value="on" />
+                    <xs:pattern value="off" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+	</xs:complexType>
+        </xs:element>
+
+        <!-- uiser interface -->
+        <xs:element name="Ui">
+            <xs:complexType>
+                <xs:attribute name="locale" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string"/>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="adminpin" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:integer">
+                            <xs:pattern value="[0-9][0-9][0-9][0-9]" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="terminalType" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string" />
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="clock" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="enabled" />
+                            <xs:pattern value="disabled" />
+                            <xs:pattern value="on" />
+                            <xs:pattern value="off" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+                <xs:attribute name="lights" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="enabled" />
+                            <xs:pattern value="disabled" />
+                            <xs:pattern value="on" />
+                            <xs:pattern value="off" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:complexType>
+        </xs:element>
+
+        <!-- 112 tel -->
+        <xs:element name="EmergencyCall">
+            <xs:complexType>
+                <xs:attribute name="uri" use="optional">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string" />
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:complexType>
+        </xs:element>
+
+        <!-- network iface -->
+        <xs:element name="Network">
+        <xs:complexType>
+            <xs:attribute name="interface" use="optional">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string" />
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+        </xs:element>
+
+        <!-- system beeper -->
+        <xs:element name="Beeper">
+        <xs:complexType>
+            <xs:attribute name="dev" use="optional">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string" />
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+        </xs:element>
+
+        <!-- logging system -->
+        <xs:element name="Log">
+        <xs:complexType>
+            <xs:attribute name="path" use="optional">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string" />
+                </xs:simpleType>
+            </xs:attribute>
+
+            <xs:attribute name="std" use="optional">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="enabled" />
+                        <xs:pattern value="disabled" />
+                        <xs:pattern value="on" />
+                        <xs:pattern value="off" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+
+            <xs:attribute name="colors" use="optional">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string" />
+                </xs:simpleType>
+            </xs:attribute>
+
+            <xs:attribute name="time" use="optional">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="enabled" />
+                        <xs:pattern value="disabled" />
+                        <xs:pattern value="on" />
+                        <xs:pattern value="off" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+
+            <xs:attribute name="nanotime" use="optional">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="enabled" />
+                        <xs:pattern value="disabled" />
+                        <xs:pattern value="on" />
+                        <xs:pattern value="off" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+
+            <xs:attribute name="short" use="optional">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="enabled" />
+                        <xs:pattern value="disabled" />
+                        <xs:pattern value="on" />
+                        <xs:pattern value="off" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+
+            <xs:attribute name="debugLevel" use="optional">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:pattern value="enabled" />
+                        <xs:pattern value="disabled" />
+                        <xs:pattern value="on" />
+                        <xs:pattern value="off" />
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+
+            <xs:attribute name="verbosity" use="optional">
+                <xs:simpleType>
+                    <xs:restriction base="xs:integer">
+                        <xs:enumeration value="0"/>
+                        <xs:enumeration value="1"/>
+                        <xs:enumeration value="2"/>
+                        <xs:enumeration value="3"/>
+                        <xs:enumeration value="4"/>
+                        <!-- does it have 5??? -->
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+
+        </xs:complexType>
+        </xs:element>
+
+        <xs:element name="Phonebook">
+        <xs:complexType>
+            <xs:attribute name="src"  use="optional"/>
+        </xs:complexType>
+        </xs:element>
+
 </xs:sequence>
 </xs:complexType>
 </xs:element>
