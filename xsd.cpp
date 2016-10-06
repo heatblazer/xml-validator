@@ -23,18 +23,20 @@ void Xsd::handleValidationError(void *ctx, const char *format, ...) {
     va_start(args, format);
     vasprintf(&errMsg, format, args);
     va_end(args);
-#if 0
+
+    // enumerations only
     char* start = strchr(errMsg, '{');
-    char* end = strchr(errMsg, '}');
-    int len = end - start;
-    char* str = new char[len-2];
-    start++;
-    end--;
-    strncpy(str, start, len-2);
-    // TODO!!!
-    QString s(str);
-    QStringList vals = s.split(",");
-#endif
+    if (start != NULL) {
+        char* end = strchr(errMsg, '}');
+        int len = end - start;
+        char* str = new char[len-2];
+        start++;
+        end--;
+        strncpy(str, start, len-2);
+        // TODO!!!
+        QString s(str);
+        QStringList vals = s.split(",");
+    }
     fprintf(stderr, "Validation Error: %s", errMsg);
     free(errMsg);
 }
