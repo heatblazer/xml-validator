@@ -114,7 +114,7 @@ bool Xsd::parseXsd(const char* fname)
     }
     root_element = xmlDocGetRootElement(doc);
 
-    _walker(root_element, &_print_node);
+    _walker(root_element, NULL/*&_print_node*/);
     xmlFreeDoc(doc);
     xmlCleanupParser();
 
@@ -152,14 +152,15 @@ void Xsd::_walker(xmlNode *root, xmlOperation op)
 {
     xmlNode* cur = NULL;
     for(cur = root; cur != NULL; cur = cur->next) {
-        op(cur);
+        if (op != NULL) {
+            op(cur);
+        }
         _walker(cur->children, op);
     }
 }
 
 void Xsd::_print_node(xmlNode *node)
 {
-
     if (node != NULL) {
         printf("<%s>\n", node->name);
     }
