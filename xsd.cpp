@@ -74,6 +74,7 @@ bool Xsd::validateXml(Xml * const xml)
     }
 
     m_xsd.schema = xmlSchemaParse(m_xsd.parserCtx);
+
     if (m_xsd.schema == NULL) {
         if (m_verbosity) {
             fprintf(stderr, "Could not parse XSD schema\n");
@@ -102,6 +103,24 @@ bool Xsd::validateXml(Xml * const xml)
     return res;
 }
 
+bool Xsd::parseXsd(const char* fname)
+{
+    bool res = false;
+    xmlDoc* doc = NULL;
+    xmlNode* root_element = NULL;
+    doc = xmlReadFile(fname, NULL, 0);
+    if (doc == NULL) {
+        return res;
+    }
+    root_element = xmlDocGetRootElement(doc);
+
+    _walker(root_element, &_print_node);
+    xmlFreeDoc(doc);
+    xmlCleanupParser();
+
+    return res;
+}
+
 bool Xsd::loadXsd(const char *fname)
 {
     m_file  = fname;
@@ -126,6 +145,23 @@ void Xsd::_cleanup()
 
     if (m_xsd.validCtx != NULL) {
         xmlSchemaFreeValidCtxt(m_xsd.validCtx);
+    }
+}
+
+void Xsd::_walker(xmlNode *root, xmlOperation op)
+{
+    xmlNode* cur = NULL;
+    for(cur = root; cur != NULL; cur = cur->next) {
+        op(cur);
+        _walker(cur->children, op);
+    }
+}
+
+void Xsd::_print_node(xmlNode *node)
+{
+
+    if (node != NULL) {
+        printf("<%s>\n", node->name);
     }
 }
 

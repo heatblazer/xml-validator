@@ -66,6 +66,7 @@ int main(int argc, char *argv[])
                    exit(3);
                }
                xsd.loadXsd(argv[i+1]);
+               xsd.parseXsd("assets/schema.xsd");
                break;
            case 1:
                // omit verbosity - set the message level
