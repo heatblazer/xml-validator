@@ -23,7 +23,7 @@ void Xsd::handleValidationError(void *ctx, const char *format, ...) {
     va_start(args, format);
     vasprintf(&errMsg, format, args);
     va_end(args);
-
+#if 0
     char* start = strchr(errMsg, '{');
     char* end = strchr(errMsg, '}');
     int len = end - start;
@@ -34,6 +34,7 @@ void Xsd::handleValidationError(void *ctx, const char *format, ...) {
     // TODO!!!
     QString s(str);
     QStringList vals = s.split(",");
+#endif
     fprintf(stderr, "Validation Error: %s", errMsg);
     free(errMsg);
 }
