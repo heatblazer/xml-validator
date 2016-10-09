@@ -1,9 +1,5 @@
 #include "xml.h"
-
-#include <stdio.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <string.h>
+#include "utils.h"
 
 #include <libxml/parser.h>
 #include <libxml/valid.h>
@@ -11,38 +7,41 @@
 namespace izxml {
 
 Xml::Xml()
-    : m_data(nullptr),
-      m_verbosity(true)
+    : m_verbosity(true),
+      m_data({0, NULL})
 {
 
 }
 
 Xml::~Xml()
 {
-
+    if (m_data.data != NULL) {
+        free(m_data.data);
+        m_data.data = NULL;
+        m_data.size = 0;
+    }
 }
 
-void Xml::loadXml(const char *xml)
+bool Xml::loadXml(const char *xml)
 {
-    m_size = _get_file_size(xml);
-    m_data = new char[sizeof(char)*m_size+1];
-    FILE* fp = fopen(xml, "r");
-    char c;
-    unsigned int i = 0;
-    while ( (c = fgetc(fp)) != -1) {
-        m_data[i++] = c;
+    m_data.size = Utils::getFileSize(xml);
+    m_data.data = Utils::loadFileData(xml);
+
+    if (m_data.size <=0 || m_data.data == NULL) {
+        return false;
     }
-    fclose(fp);
+
+    return true;
 }
 
 char *Xml::getRawBytes()
 {
-    return m_data;
+    return m_data.data;
 }
 
 unsigned int Xml::getXmlSize()
 {
-    return m_size;
+    return m_data.size;
 }
 
 void Xml::verbosity(bool on_off)
@@ -58,16 +57,6 @@ void Xml::_update()
         initdocbDefaultSAXHandler(NULL);
         initGenericErrorDefaultFunc(NULL);
     }
-}
-
-unsigned int Xml::_get_file_size(const char *file)
-{
-    struct stat buf;
-    if ((stat(file, &buf)) != 0) {
-        return 0;
-    }
-
-    return (unsigned int) buf.st_size;
 }
 
 

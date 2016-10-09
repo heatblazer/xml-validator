@@ -9,19 +9,20 @@ public:
     Xml();
     ~Xml();
 
-    void loadXml(const char* xml);
+    bool loadXml(const char* xml);
     char* getRawBytes();
     unsigned int getXmlSize();
     void verbosity(bool on_off);
 
 private:
     void _update();
-    unsigned int  _get_file_size(const char* file);
 
 private:
-    char* m_data;
-    unsigned int m_size;
     bool m_verbosity;
+    struct {
+        unsigned int size;
+        char* data;
+    } m_data;
 };
 
 } // izxml

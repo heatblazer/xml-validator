@@ -2,7 +2,7 @@
 <Config xmlns:xlink="http://www.w3.org/1999/xlink"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../schema/config.xsd"
-        version="3.0">
+        >
 
 <Voip>
     <SipRegistrar url="sip:voip" />

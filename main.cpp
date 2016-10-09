@@ -1,22 +1,5 @@
-#include <iostream>
-#include <stdio.h>
-#include <string.h>
-
 #include "xml.h"
 #include "xsd.h"
-
-using namespace std;
-
-static void print_menu(const char* opt)
-{
-    if (opt != NULL) {
-        puts(opt);
-    }
-    printf("Usage:\n"
-              "-a omit all messages\n"
-              "-x <xml file>\n"
-              "-s <xsd file>\n");
-}
 
 /// 1 is suppres verbosity
 /// 2 is load xml
@@ -26,24 +9,19 @@ static void print_menu(const char* opt)
 /// \param arg
 /// \return
 ///
-static int parse_args(char* arg)
-{
-    int res = 0;
-    if(strcmp(arg, "-a") == 0) {
-        res = 1;
-    } else if (strcmp(arg, "-x") == 0) {
-        res = 2;
-    } else if (strcmp(arg, "-s") == 0) {
-        res = 3;
-    } else {
-        // unnown
-        res = 0;
-    }
-    return res;
-}
+int parse_args(char* arg);
+
+///TODO(ilian) add an option to support
+/// XSD validation
+/// \brief print_menu
+/// \param opt
+///
+void print_menu(const char* opt);
+
 
 int main(int argc, char *argv[])
 {
+
     if (argc <=2 ) {
         print_menu(NULL);
         exit(10);
@@ -78,10 +56,37 @@ int main(int argc, char *argv[])
            }
        }
        // DELETEME
-       std::cout << "Validation : " << (xsd.validateXml(&xml) ? "OK" : "FAIL")
-                 << " \n";
-
+       fprintf(stdout, "Validation is: %s\n", (xsd.validateXml(&xml)? "OK" : "FAIL"));
     }
+    return 0;
+}
 
-    exit(0);
+
+
+void print_menu(const char* opt)
+{
+    if (opt != NULL) {
+        puts(opt);
+    }
+    printf("Usage:\n"
+              "-a omit all messages\n"
+              "-x <xml file>\n"
+              "-s <xsd file>\n");
+}
+
+
+int parse_args(char* arg)
+{
+    int res = 0;
+    if(strcmp(arg, "-a") == 0) {
+        res = 1;
+    } else if (strcmp(arg, "-x") == 0) {
+        res = 2;
+    } else if (strcmp(arg, "-s") == 0) {
+        res = 3;
+    } else {
+        // unnown
+        res = 0;
+    }
+    return res;
 }

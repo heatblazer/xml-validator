@@ -13,9 +13,17 @@ class Xml;
 
 typedef void (*xmlOperation)(xmlNode*);
 
+struct pair_t
+{
+    QString name;
+    QString value;
+};
+
 class Xsd
 {
 public:
+    static QList<pair_t> s_pairs;
+
     Xsd();
     ~Xsd();
     static void handleValidationError(void *ctx, const char *format, ...);
@@ -26,11 +34,9 @@ public:
 
 private:
     static void _print_node(xmlNode* node);
-
     void _cleanup();
     void _walker(xmlNode* root, xmlOperation op);
 private:
-    const char* m_file;
     bool m_verbosity;
     struct {
         xmlSchemaParserCtxtPtr parserCtx;
@@ -38,7 +44,11 @@ private:
         xmlSchemaValidCtxtPtr validCtx;
     } m_xsd;
 
-    QList<QString> m_values;
+    struct {
+        size_t size;
+        char* data;
+    } m_data;
+
 };
 
 } // namespace izxml
